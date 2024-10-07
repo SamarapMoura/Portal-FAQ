@@ -38,7 +38,7 @@ model users {
   id        Int         @id @default(autoincrement())
   username  String      @db.VarChar(45)
   login     String      @db.VarChar(100)
-  password  String?     @db.VarChar(45)
+  password  String?     @db.VarChar(60)
   answers   answers[]
   questions questions[]
 }
