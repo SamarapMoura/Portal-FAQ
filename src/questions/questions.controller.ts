@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import { Question } from './interface/question.interface';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('questions')
+@UseGuards(AuthGuard('jwt'))
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 

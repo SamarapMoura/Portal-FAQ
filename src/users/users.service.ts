@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from './interface/user.interface';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -22,6 +22,7 @@ export class UsersService {
                 username: createUserDto.username,
                 login: createUserDto.login,
                 password: hashedPassword,
+                role: createUserDto.role,
             },
         });
     };
@@ -35,14 +36,13 @@ export class UsersService {
             password = await hash(updateUserDto.password, saltRounds);
         }
 
-    
-
         return await this.prisma.users.update({
             where: { id },
             data: {
                 username: updateUserDto.username,
                 login: updateUserDto.login,
-                password: password || updateUserDto.password
+                password: password || updateUserDto.password,
+                role: updateUserDto.role
             },
         });
     };
@@ -53,4 +53,19 @@ export class UsersService {
         });
         return{ message: "User deletado" }
     };
+
+    async findUserByEmail(login: string) {
+        const existingUser = await this.prisma.users.findUnique({
+            where: { login },
+        });
+
+        if (!existingUser) {
+            throw new UnauthorizedException('Email e/ou senha inválidos.');
+        }
+
+        return await this.prisma.users.findUnique({
+            where: { login },
+        })
+    }
+
 }
