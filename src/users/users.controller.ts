@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './interface/user.interface';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -22,12 +22,16 @@ export class UsersController {
   };
 
   @Patch('update-user/:id')
-  async UpdateUsers(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<User>{
-    return await this.usersService.UpdateUsers(id, updateUserDto)
+  async UpdateUsers(
+  @Param('id', ParseIntPipe) id: number, 
+  @Body() updateUserDto: UpdateUserDto,
+  @Request() req,
+): Promise<User>{
+    return await this.usersService.UpdateUsers(id, updateUserDto, req.user.id)
   };
 
   @Delete('delete-user/:id')
-  async DeleteUsers(@Param('id', ParseIntPipe) id: number){
-    return await this.usersService.DeleteUsers(id)
+  async DeleteUsers(@Param('id', ParseIntPipe) id: number, @Request() req){
+    return await this.usersService.DeleteUsers(id, req.user.id)
   };
 }

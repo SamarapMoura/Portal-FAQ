@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, Request } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import { Question } from './interface/question.interface';
 import { CreateQuestionDto } from './dto/create-question.dto';
@@ -21,12 +21,12 @@ export class QuestionsController {
   };
 
   @Patch('update-question/:id')
-  async UpdateQuestions(@Param('id', ParseIntPipe) id: number, @Body() updateQuestionDto: UpdateQuestionDto): Promise<Question>{
-    return await this.questionsService.UpdateQuestions(id, updateQuestionDto)
+  async UpdateQuestions(@Param('id', ParseIntPipe) id: number, @Body() updateQuestionDto: UpdateQuestionDto, @Request() req,): Promise<Question>{
+    return await this.questionsService.UpdateQuestions(id, updateQuestionDto, req.user.id)
   };
 
   @Delete('delete-question/:id')
-  async DeleteQuestions(@Param('id', ParseIntPipe) id: number){
-    return await this.questionsService.DeleteQuestions(id)
+  async DeleteQuestions(@Param('id', ParseIntPipe) id: number, @Request() req){
+    return await this.questionsService.DeleteQuestions(id, req.user.id)
   };
 }

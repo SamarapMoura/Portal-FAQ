@@ -1,21 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { Question } from './interface/question.interface';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 
 
-// urgence: boolean;
-// title: string;
-// content: string;
-// id_category: number;
-// id_user: number;
-
 @Injectable()
 export class QuestionsService {
     constructor(private prisma: PrismaService){}
+
     async GetQuestions(): Promise<Question[]>{
-        return await this.prisma.questions.findMany();
+        return await this.prisma.questions.findMany({});
     }
     
     async CreateQuestions(createQuestionDto: CreateQuestionDto):Promise<Question>{
@@ -30,7 +25,15 @@ export class QuestionsService {
         });
     };
     
-    async UpdateQuestions(id: number, updateQuestionDto: UpdateQuestionDto):Promise<Question>{
+    async UpdateQuestions(id: number, updateQuestionDto: UpdateQuestionDto, user_id_request: number):Promise<Question>{
+
+        if (id !== user_id_request){
+            throw new HttpException(
+                'Essa pergunta não lhe pertence.',
+                HttpStatus.UNAUTHORIZED,
+            )
+        }
+
         return await this.prisma.questions.update({
             where: { id },
             data: {
@@ -42,7 +45,14 @@ export class QuestionsService {
         });
     };
 
-    async DeleteQuestions(id: number):Promise<{ message: string }>{
+    async DeleteQuestions(id: number, user_id_request: number):Promise<{ message: string }>{
+
+        if (id !== user_id_request){
+            throw new HttpException(
+                'Você não pode deletar esta pergunta, ela não lhe pertence.',
+                HttpStatus.UNAUTHORIZED,
+            )
+        }
         await this.prisma.questions.delete({
             where: { id }
         });

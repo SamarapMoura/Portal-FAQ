@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from './interface/user.interface';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -10,7 +10,14 @@ export class UsersService {
     constructor(private prisma: PrismaService){}
     
     async GetUsers(): Promise<User[]>{
-        return await this.prisma.users.findMany();
+        return await this.prisma.users.findMany({
+            select: {
+                id: true,
+                username: true,
+                login: true,
+                role: true,
+            }
+        });
     };
 
     async CreateUsers(createUserDto: CreateUserDto):Promise<User>{
@@ -27,8 +34,15 @@ export class UsersService {
         });
     };
 
-    async UpdateUsers(id: number, updateUserDto: UpdateUserDto):Promise<User>{
+    async UpdateUsers(id: number, updateUserDto: UpdateUserDto, user_id_request: number):Promise<User>{
 
+        if (id !== user_id_request){
+            throw new HttpException(
+                'Você não é esse usuário.',
+                HttpStatus.UNAUTHORIZED,
+            )
+        }
+            
         let password = updateUserDto.password
 
         if(password){
@@ -47,7 +61,15 @@ export class UsersService {
         });
     };
 
-    async DeleteUsers(id: number):Promise<{ message: string }>{
+    async DeleteUsers(id: number, user_id_request: number):Promise<{ message: string }>{
+        
+        if (id !== user_id_request){
+            throw new HttpException(
+                'Você não é esse usuário.',
+                HttpStatus.UNAUTHORIZED,
+            )
+        }
+
         await this.prisma.users.delete({
             where: { id }
         });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from './interface/response.interface';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateResponseDto } from './dto/create-response.dto';
@@ -22,7 +22,14 @@ export class AnswersService {
         });
     };
 
-    async UpdateResponse(id: number, updateResponseDto: UpdateResponseDto):Promise<Response>{
+    async UpdateResponse(id: number, updateResponseDto: UpdateResponseDto,  user_id_request: number):Promise<Response>{
+       
+        if (id !== user_id_request){
+            throw new HttpException(
+                'Essa resposta não lhe pertence.',
+                HttpStatus.UNAUTHORIZED,
+            )
+        }
         return await this.prisma.answers.update({
             where: { id },
             data: {
@@ -32,7 +39,15 @@ export class AnswersService {
         });
     };
 
-    async DeleteResponse(id: number):Promise<{ message: string }>{
+    async DeleteResponse(id: number, user_id_request: number):Promise<{ message: string }>{
+
+        if (id !== user_id_request){
+            throw new HttpException(
+                'Você não pode deletar esta resposta, ela não lhe pertence.',
+                HttpStatus.UNAUTHORIZED,
+            )
+        }
+
         await this.prisma.answers.delete({
             where: { id }
         });
