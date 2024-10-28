@@ -1,0 +1,117 @@
+.login_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #368D58;
+    font-weight: 600;
+    font-style: normal;
+    font-family: "Poppins", sans-serif;
+    
+  }
+  
+.form_login {
+    background-color: rgb(255, 255, 255);
+    padding: 210px;
+    width: 190vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+.label_login {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+.input_login {
+    width: 460px;
+    height: 543;
+    padding: 8px;
+    margin-bottom: 16px;
+    background-color: #C1DDCC;
+    border: 1px solid #C1DDCC;
+    border-radius: 4px;
+  }
+
+.button_container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 20px;
+}
+  
+.button_login {
+    width: 160px;
+    height: 50;
+    padding: 10px;
+    background-color: #EA6D62;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+.button_cadastrar {
+    width: 160px;
+    height: 50;
+    padding: 10px;
+    background-color: #EA6D62;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+.button_login:hover {
+    background-color: #ea6d6296;
+  }
+  
+.button_cadastrar:hover {
+    background-color: #ea6d6296;
+  }
+
+.frase_caption {
+    text-align: center; 
+    font-size: 25px; 
+    color: #000000;
+    margin-top: 9px;
+}
+
+.login_container {
+  display: flex;          
+  flex-direction: column; 
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.button_eye {
+  position: relative;
+  top: 3px;
+  border:none;
+  padding-bottom: 6px;
+  background-color: #C1DDCC;
+  border-radius: 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  cursor: pointer;
+  
+}
+
+.Olho_senha {
+  position:relative;
+  top: 5px;
+}
+
+.div_password{
+  width: 482px;
+}
+
+    
